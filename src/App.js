@@ -10,11 +10,13 @@ function Square(props) {
 }
 
 class Board extends React.Component {
-  renderSquare(i) {
+  renderSquare(i, j) {
+    const index = getIndex(i, j);
     return (
       <Square
-        value={this.props.squares[i]}
-        onClick={() => this.props.onClick(i)}
+        key={index}
+        value={this.props.squares[index]}
+        onClick={() => this.props.onClick(i, j)}
       />
     );
   }
@@ -22,6 +24,16 @@ class Board extends React.Component {
   render() {
     return (
       <div>
+        {[0, 1, 2].map(i => 
+          <div key={i} className="board-row">
+            {[0, 1, 2].map(j => this.renderSquare(i, j))}
+          </div>
+        )}
+      </div>
+    );
+  }
+  /*
+        )}
         <div className="board-row">
           {this.renderSquare(0)}
           {this.renderSquare(1)}
@@ -39,7 +51,7 @@ class Board extends React.Component {
         </div>
       </div>
     );
-  }
+  }*/ 
 }
 
 class Game extends React.Component {
@@ -56,14 +68,15 @@ class Game extends React.Component {
     };
   }
 
-  handleClick(i) {
+  handleClick(i, j) {
+    const index = getIndex(i, j);
     const history = this.state.history.slice(0, this.state.stepNumber + 1);
     const current = history[history.length - 1];
     const squares = current.squares.slice();
-    if (calculateWinner(squares) || squares[i]) {
+    if (calculateWinner(squares) || squares[index]) {
       return;
     }
-    squares[i] = this.state.xIsNext ? "X" : "O";
+    squares[index] = this.state.xIsNext ? "X" : "O";
     this.setState({
       history: history.concat([
         {
@@ -110,7 +123,7 @@ class Game extends React.Component {
         <div className="game-board">
           <Board
             squares={current.squares}
-            onClick={i => this.handleClick(i)}
+            onClick={(i, j) => this.handleClick(i, j)}
           />
         </div>
         <div className="game-info">
@@ -140,6 +153,10 @@ function calculateWinner(squares) {
     }
   }
   return null;
+}
+
+function getIndex(i, j){
+  return i * 3 + j;
 }
 
 export default Game;
