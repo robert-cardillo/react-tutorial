@@ -32,26 +32,6 @@ class Board extends React.Component {
       </div>
     );
   }
-  /*
-        )}
-        <div className="board-row">
-          {this.renderSquare(0)}
-          {this.renderSquare(1)}
-          {this.renderSquare(2)}
-        </div>
-        <div className="board-row">
-          {this.renderSquare(3)}
-          {this.renderSquare(4)}
-          {this.renderSquare(5)}
-        </div>
-        <div className="board-row">
-          {this.renderSquare(6)}
-          {this.renderSquare(7)}
-          {this.renderSquare(8)}
-        </div>
-      </div>
-    );
-  }*/ 
 }
 
 class Game extends React.Component {
@@ -64,7 +44,8 @@ class Game extends React.Component {
         }
       ],
       stepNumber: 0,
-      xIsNext: true
+      xIsNext: true,
+      sortAsc: true
     };
   }
 
@@ -133,7 +114,8 @@ class Game extends React.Component {
         </div>
         <div className="game-info">
           <div>{status}</div>
-          <ol>{moves}</ol>
+          <button onClick={()=>{ this.setState({sortAsc: !this.state.sortAsc})}}>Sort {(this.state.sortAsc) ? 'Desc' : 'Asc'}</button>
+          <ol style={{flexDirection: (this.state.sortAsc) ? 'column' : 'column-reverse'}}>{moves}</ol>
         </div>
       </div>
     );
